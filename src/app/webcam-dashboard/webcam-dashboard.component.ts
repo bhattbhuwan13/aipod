@@ -689,6 +689,7 @@ export class WebcamDashboardComponent implements OnInit {
     this.webFeedStatus = false;
     this.detectionMode = 1;
     this.isVisible = 1;
+    this.webcamPrediction = null;
     this.detectFace(this.video);
   }
 
@@ -703,6 +704,7 @@ export class WebcamDashboardComponent implements OnInit {
     this.webFeedStatus = false;
     this.detectionMode = 3;
     this.isVisible = 1;
+    this.webcamPrediction = null;
     this.detectFrame(this.video, this.objectModel);
   }
 
@@ -717,6 +719,7 @@ export class WebcamDashboardComponent implements OnInit {
     this.webFeedStatus = false;
     this.detectionMode = 2;
     this.isVisible = 1;
+    this.webcamPrediction = null;
     this.canvas
       .getContext("2d")
       .clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -734,6 +737,7 @@ export class WebcamDashboardComponent implements OnInit {
     this.webFeedStatus = false;
     this.detectionMode = 3;
     this.isVisible = 1;
+    this.webcamPrediction = null;
     this.detectFrame(this.video, this.objectModel);
   }
 
@@ -749,9 +753,11 @@ export class WebcamDashboardComponent implements OnInit {
     this.webFeedStatus = false;
     this.detectionMode = 5;
     this.isVisible = 0;
+    this.webcamPrediction = null;
     this.detectFrame(this.video, this.objectModel);
   }
 
+  webcamPrediction: string = null;
   webFeedStatus: boolean = false;
   public onWebFeedButton() {
     console.log("web feed button clicked");
@@ -786,12 +792,12 @@ export class WebcamDashboardComponent implements OnInit {
 
     // uncomment below lines once everything is fine
 
-    // this.facedectapiservice
-    //   .recognizeImage(criminal_to_detect)
-    //   .subscribe(reponse => {
-    //     var predicted = reponse.images[0].transaction.subject_id;
-    //     console.log("The predicted criminal is " + predicted);
-    //   });
+    this.facedectapiservice
+      .recognizeImage(criminal_to_detect)
+      .subscribe(reponse => {
+        this.webcamPrediction = reponse.images[0].transaction.subject_id;
+        console.log("The predicted criminal is " + this.webcamPrediction);
+      });
 
     // uncomment above line if everything works
 
@@ -800,10 +806,6 @@ export class WebcamDashboardComponent implements OnInit {
   }
 
   // Function for sleep
-
-  public sleep = milliseconds => {
-    return new Promise(resolve => setTimeout(resolve, milliseconds));
-  };
 
   // For the handling of files
   selectedFile: File = null;
