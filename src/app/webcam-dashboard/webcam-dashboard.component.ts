@@ -751,6 +751,7 @@ export class WebcamDashboardComponent implements OnInit {
     this.isVisible = 0;
     this.detectFrame(this.video, this.objectModel);
   }
+
   webFeedStatus: boolean = false;
   public onWebFeedButton() {
     console.log("web feed button clicked");
@@ -764,15 +765,16 @@ export class WebcamDashboardComponent implements OnInit {
     this.isVisible = 1;
 
     //for getting image from the canvas
+
+    console.log("check web image running");
     var canvas = document.createElement("canvas");
     canvas.width = this.video.videoWidth;
     canvas.height = this.video.videoHeight;
-
-    // while (this.webFeedStatus) {
     canvas
       .getContext("2d")
       .drawImage(this.video, 0, 0, canvas.width, canvas.height);
     var imgData = canvas.toDataURL("image/jpeg");
+
     // Below two lines are used to see the image taken from the webcam in a new page
     // var w = window.open("about:blank", "image from canvas");
     // w.document.write("<img src='" + imgData + "' alt='from canvas'/>");
@@ -781,14 +783,27 @@ export class WebcamDashboardComponent implements OnInit {
       image: imgData,
       gallery_name: "criminals"
     };
-    this.facedectapiservice
-      .recognizeImage(criminal_to_detect)
-      .subscribe(reponse => {
-        var predicted = reponse.images[0].transaction.subject_id;
-        console.log("The predicted criminal is " + predicted);
-      });
-    // }
+
+    // uncomment below lines once everything is fine
+
+    // this.facedectapiservice
+    //   .recognizeImage(criminal_to_detect)
+    //   .subscribe(reponse => {
+    //     var predicted = reponse.images[0].transaction.subject_id;
+    //     console.log("The predicted criminal is " + predicted);
+    //   });
+
+    // uncomment above line if everything works
+
+    // } while (this.webFeedStatus == true);
+    console.log("exiting");
   }
+
+  // Function for sleep
+
+  public sleep = milliseconds => {
+    return new Promise(resolve => setTimeout(resolve, milliseconds));
+  };
 
   // For the handling of files
   selectedFile: File = null;
