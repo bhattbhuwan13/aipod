@@ -800,19 +800,51 @@ export class WebcamDashboardComponent implements OnInit {
         console.log("The predicted criminal is " + this.webcamPrediction);
 
         this.complete_name = this.getFirstandLastName(this.webcamPrediction);
-        this.detected_faces.push({
-          firstName: this.complete_name[0],
-          lastName: this.complete_name[1],
-          photo: "./assets/img/placeholder1.jpg",
-          gender: "Gender",
-          dateOfBirth: "Date Of Birth",
-          placeOfBirth: "Place of Birth",
-          nationality: "Nationality",
-          wantedStatus: 0,
-          wantedBy: "Wanted by",
-          charge: "Detecting..",
-          timeStamp: "Time"
-        });
+        console.log("The complete name is :" + this.complete_name);
+        if (this.complete_name[0] == "carlos") {
+          this.detected_faces.push({
+            firstName: "carlos",
+            lastName: "ALVAREZ",
+            photo: "./assets/img/placeholder1.jpg",
+            gender: "Male",
+            dateOfBirth: "31/10/1971",
+            placeOfBirth: "Miami, Florida, United States",
+            nationality: "United States",
+            wantedStatus: 1,
+            wantedBy: "Interpol",
+            charge:
+              "Conspiracy to Possess with Intent to Distribute Five Kilograms or More of Cocaine",
+            timeStamp: "Time"
+          });
+        } else if (this.complete_name[0] == "marwan") {
+          this.detected_faces.push({
+            firstName: "marwan",
+            lastName: "sweidan",
+            photo: "./assets/img/placeholder1.jpg",
+            gender: "Male",
+            dateOfBirth: "10/07/1987",
+            placeOfBirth: "BEIRUT, Lebanon",
+            nationality: "Lebanon",
+            wantedStatus: 1,
+            wantedBy: "-",
+            charge: "sexual assualt",
+            timeStamp: "Time"
+          });
+        } else {
+          this.detected_faces.push({
+            firstName: this.complete_name[0],
+            lastName: this.complete_name[1],
+            photo: "./assets/img/placeholder1.jpg",
+            gender: "Gender",
+            dateOfBirth: "Date Of Birth",
+            placeOfBirth: "Place of Birth",
+            nationality: "Nationality",
+            wantedStatus: 0,
+            wantedBy: "Wanted by",
+            charge: "Detecting..",
+            timeStamp: "Time"
+          });
+        }
       });
 
     // uncomment above line if everything works
@@ -920,19 +952,51 @@ export class WebcamDashboardComponent implements OnInit {
         this.predicted_criminal = reponse.images[0].transaction.subject_id;
 
         this.full_name = this.getFirstandLastName(this.predicted_criminal);
-        this.detected_faces.push({
-          firstName: this.full_name[0],
-          lastName: this.full_name[1],
-          photo: "./assets/img/placeholder1.jpg",
-          gender: "Gender",
-          dateOfBirth: "Date Of Birth",
-          placeOfBirth: "Place of Birth",
-          nationality: "Nationality",
-          wantedStatus: 0,
-          wantedBy: "Wanted by",
-          charge: "Detecting..",
-          timeStamp: "Time"
-        });
+        console.log("The complete name is :" + this.full_name);
+        if (this.full_name[0] == "carlos") {
+          this.detected_faces.push({
+            firstName: "carlos",
+            lastName: "ALVAREZ",
+            photo: "./assets/img/placeholder1.jpg",
+            gender: "Male",
+            dateOfBirth: "31/10/1971",
+            placeOfBirth: "Miami, Florida, United States",
+            nationality: "United States",
+            wantedStatus: 1,
+            wantedBy: "Interpol",
+            charge:
+              "Conspiracy to Possess with Intent to Distribute Five Kilograms or More of Cocaine",
+            timeStamp: "Time"
+          });
+        } else if (this.full_name[0] == "marwan") {
+          this.detected_faces.push({
+            firstName: "marwan",
+            lastName: "sweidan",
+            photo: "./assets/img/placeholder1.jpg",
+            gender: "Male",
+            dateOfBirth: "10/07/1987",
+            placeOfBirth: "BEIRUT, Lebanon",
+            nationality: "Lebanon",
+            wantedStatus: 1,
+            wantedBy: "Texas police department",
+            charge: "sexual assualt",
+            timeStamp: "Time"
+          });
+        } else {
+          this.detected_faces.push({
+            firstName: this.full_name[0],
+            lastName: this.full_name[1],
+            photo: "./assets/img/placeholder1.jpg",
+            gender: "Gender",
+            dateOfBirth: "Date Of Birth",
+            placeOfBirth: "Place of Birth",
+            nationality: "Nationality",
+            wantedStatus: 0,
+            wantedBy: "Wanted by",
+            charge: "Detecting..",
+            timeStamp: "Time"
+          });
+        }
       });
   }
 
@@ -947,6 +1011,7 @@ export class WebcamDashboardComponent implements OnInit {
     }
 
     console.log("Firstname and lastnames are :" + first_name + last_name);
+    console.log(first_name, last_name);
 
     return [first_name, last_name];
   }
