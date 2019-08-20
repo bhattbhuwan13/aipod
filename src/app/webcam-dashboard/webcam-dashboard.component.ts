@@ -830,6 +830,35 @@ export class WebcamDashboardComponent implements OnInit {
             charge: "sexual assualt",
             timeStamp: "Time"
           });
+        } else if (this.complete_name[0] == "raziiat") {
+          this.detected_faces.push({
+            firstName: "raziiat",
+            lastName: "utsumieva",
+            photo: "./assets/img/placeholder1.jpg",
+            gender: "Female",
+            dateOfBirth: "05/05/1979",
+            placeOfBirth: "BUYNAKSK TOWN, DAGESTAN REPUBLIC, Russia",
+            nationality: "Russia",
+            wantedStatus: 1,
+            wantedBy: "Interpol",
+            charge: "Participation in illegal armed formation",
+            timeStamp: "Time"
+          });
+        } else if (this.complete_name[0] == "sergio") {
+          this.detected_faces.push({
+            firstName: "sergio",
+            lastName: "robles",
+            photo: "./assets/img/placeholder1.jpg",
+            gender: "Male",
+            dateOfBirth: "04/04/1982",
+            placeOfBirth: "Mexico",
+            nationality: "Mexico",
+            wantedStatus: 1,
+            wantedBy: "Interpol",
+            charge:
+              "Conspiracy to possess with intent to distribute over 5 kilograms of cocaine",
+            timeStamp: "Time"
+          });
         } else {
           this.detected_faces.push({
             firstName: this.complete_name[0],
@@ -980,6 +1009,35 @@ export class WebcamDashboardComponent implements OnInit {
             wantedStatus: 1,
             wantedBy: "Texas police department",
             charge: "sexual assualt",
+            timeStamp: "Time"
+          });
+        } else if (this.full_name[0] == "raziiat") {
+          this.detected_faces.push({
+            firstName: "raziiat",
+            lastName: "utsumieva",
+            photo: "./assets/img/placeholder1.jpg",
+            gender: "Female",
+            dateOfBirth: "05/05/1979",
+            placeOfBirth: "BUYNAKSK TOWN, DAGESTAN REPUBLIC, Russia",
+            nationality: "Russia",
+            wantedStatus: 1,
+            wantedBy: "Interpol",
+            charge: "Participation in illegal armed formation",
+            timeStamp: "Time"
+          });
+        } else if (this.full_name[0] == "sergio") {
+          this.detected_faces.push({
+            firstName: "sergio",
+            lastName: "robles",
+            photo: "./assets/img/placeholder1.jpg",
+            gender: "Male",
+            dateOfBirth: "04/04/1982",
+            placeOfBirth: "Mexico",
+            nationality: "Mexico",
+            wantedStatus: 1,
+            wantedBy: "Interpol",
+            charge:
+              "Conspiracy to possess with intent to distribute over 5 kilograms of cocaine",
             timeStamp: "Time"
           });
         } else {
