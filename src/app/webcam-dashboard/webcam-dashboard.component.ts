@@ -799,6 +799,7 @@ export class WebcamDashboardComponent implements OnInit {
         console.log("The predicted criminal is " + this.webcamPrediction);
       });
 
+    console.log("The detected face is " + this.detected_faces[0].firstName);
     // uncomment above line if everything works
 
     // } while (this.webFeedStatus == true);
@@ -808,7 +809,7 @@ export class WebcamDashboardComponent implements OnInit {
   // Function for sleep
 
   // For the handling of files
-  selectedFile: File = null;
+  selectedFile = null;
   tcode: string = null;
   enroll_image_url: string = null;
   predict_image_url: string = null;
@@ -823,6 +824,14 @@ export class WebcamDashboardComponent implements OnInit {
 
   public fileEvent(event) {
     this.selectedFile = <File>event.target.files[0];
+    console.log("The selected file is" + this.selectedFile);
+    var reader = new FileReader();
+    reader.readAsDataURL(this.selectedFile);
+    reader.onload = _event => {
+      var imgURL = reader.result;
+      this.selectedFile = imgURL;
+      console.log("Selected file is now " + this.selectedFile);
+    };
   }
 
   // Variables for sending to the api
@@ -835,19 +844,29 @@ export class WebcamDashboardComponent implements OnInit {
     this.image = this.selectedFile;
     this.subject_id = this.tcode;
 
-    this.new_criminal = {
-      image: this.enroll_image_url,
-      subject_id: this.subject_id,
-      gallery_name: this.gallery_name
-    };
+    if (this.enroll_image_url == null) {
+      this.new_criminal = {
+        image: this.selectedFile,
+        subject_id: this.subject_id,
+        gallery_name: this.gallery_name
+      };
+    } else {
+      this.new_criminal = {
+        image: this.enroll_image_url,
+        subject_id: this.subject_id,
+        gallery_name: this.gallery_name
+      };
+    }
 
-    // this.new_criminal = JSON.stringify(this.new_criminal);
+    // Enroll image using the api
     this.facedectapiservice
       .enrollImage(this.new_criminal)
       .subscribe(reponse => {
         console.log("the code :" + reponse);
         console.log(this.new_criminal);
       });
+
+    console.log(this.selectedFile);
   }
 
   public onPredict() {
@@ -855,10 +874,17 @@ export class WebcamDashboardComponent implements OnInit {
     console.log("for predition");
     console.log("the image url for prediction :" + this.predict_image_url);
 
-    this.detect_criminal = {
-      image: this.predict_image_url,
-      gallery_name: this.gallery_name
-    };
+    if (this.predict_image_url == null) {
+      this.detect_criminal = {
+        image: this.selectedFile,
+        gallery_name: this.gallery_name
+      };
+    } else {
+      this.detect_criminal = {
+        image: this.predict_image_url,
+        gallery_name: this.gallery_name
+      };
+    }
 
     this.facedectapiservice
       .recognizeImage(this.detect_criminal)
