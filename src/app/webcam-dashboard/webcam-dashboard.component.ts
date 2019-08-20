@@ -759,6 +759,7 @@ export class WebcamDashboardComponent implements OnInit {
 
   webcamPrediction: string = null;
   webFeedStatus: boolean = false;
+  complete_name = [];
   public onWebFeedButton() {
     console.log("web feed button clicked");
     this.faceStatus = false;
@@ -797,6 +798,21 @@ export class WebcamDashboardComponent implements OnInit {
       .subscribe(reponse => {
         this.webcamPrediction = reponse.images[0].transaction.subject_id;
         console.log("The predicted criminal is " + this.webcamPrediction);
+
+        this.complete_name = this.getFirstandLastName(this.webcamPrediction);
+        this.detected_faces.push({
+          firstName: this.complete_name[0],
+          lastName: this.complete_name[1],
+          photo: "./assets/img/placeholder1.jpg",
+          gender: "Gender",
+          dateOfBirth: "Date Of Birth",
+          placeOfBirth: "Place of Birth",
+          nationality: "Nationality",
+          wantedStatus: 0,
+          wantedBy: "Wanted by",
+          charge: "Detecting..",
+          timeStamp: "Time"
+        });
       });
 
     // uncomment above line if everything works
@@ -902,6 +918,7 @@ export class WebcamDashboardComponent implements OnInit {
       .recognizeImage(this.detect_criminal)
       .subscribe(reponse => {
         this.predicted_criminal = reponse.images[0].transaction.subject_id;
+
         this.full_name = this.getFirstandLastName(this.predicted_criminal);
         this.detected_faces.push({
           firstName: this.full_name[0],
@@ -917,21 +934,16 @@ export class WebcamDashboardComponent implements OnInit {
           timeStamp: "Time"
         });
       });
-    console.log(
-      "Before calling the name splitting function :" + this.predicted_criminal
-    );
-    console.log("---------------------------------");
-    console.log("The full name is: " + this.full_name);
   }
 
   public getFirstandLastName(fullname) {
-    console.log("the full naem is : " + fullname);
     var splitted_criminal_name = fullname.split(" ");
+    console.log("The splitted names are : " + splitted_criminal_name);
     var first_name = splitted_criminal_name[0];
     var last_name = "";
     var i = 0;
-    for (i = 1; i <= splitted_criminal_name.length; i++) {
-      last_name += last_name[i] + " ";
+    for (i = 1; i < splitted_criminal_name.length; i++) {
+      last_name += splitted_criminal_name[i] + " ";
     }
 
     console.log("Firstname and lastnames are :" + first_name + last_name);
