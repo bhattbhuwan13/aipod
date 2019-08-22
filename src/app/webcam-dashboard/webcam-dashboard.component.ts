@@ -767,7 +767,7 @@ export class WebcamDashboardComponent implements OnInit {
 
   detectPerson = (video, model) => {
     if (this.video == null || this.convertState == 1) {
-      return this.frameHasPerson;
+      return;
     }
     console.log("inside Detect Person :");
     console.log("The value of this.frameHasPerson is " + this.frameHasPerson);
@@ -777,11 +777,24 @@ export class WebcamDashboardComponent implements OnInit {
       if (predictions[0].class == "person") {
         this.frameHasPerson = true;
         console.log("detectPerson() detects a person");
-        return this.frameHasPerson;
+        ///////////////////////////////////////////////
+        var canvas = document.createElement("canvas");
+        canvas.width = this.video.videoWidth;
+        canvas.height = this.video.videoHeight;
+        canvas
+          .getContext("2d")
+          .drawImage(this.video, 0, 0, canvas.width, canvas.height);
+        var imgData = canvas.toDataURL("image/jpeg");
+        console.log("Calling face detect api, kairos");
+
+        // // Below two lines are used to see the image taken from the webcam in a new page
+        // var w = window.open("about:blank", "image from canvas");
+        // w.document.write("<img src='" + imgData + "' alt='from canvas'/>");
+
+        ///////////////////////////////////////////////
       } else {
         this.frameHasPerson = false;
         console.log("detectPerson() fails to detect a person");
-        return this.frameHasPerson;
       }
     });
   };
@@ -804,7 +817,7 @@ export class WebcamDashboardComponent implements OnInit {
     this.detectionMode = 5;
     this.isVisible = 1;
     if (this.webFeedStatus == true) {
-      this.frameHasPerson = this.detectPerson(this.video, this.objectModel);
+      this.detectPerson(this.video, this.objectModel);
     }
     // //for getting image from the canvas
     // var canvas = document.createElement("canvas");
@@ -847,8 +860,8 @@ export class WebcamDashboardComponent implements OnInit {
       console.log("Calling face detect api, kairos");
 
       // Below two lines are used to see the image taken from the webcam in a new page
-      var w = window.open("about:blank", "image from canvas");
-      w.document.write("<img src='" + imgData + "' alt='from canvas'/>");
+      // var w = window.open("about:blank", "image from canvas");
+      // w.document.write("<img src='" + imgData + "' alt='from canvas'/>");
     }
     if (this.frameHasPerson == false) {
       console.log("kairos api not called");
