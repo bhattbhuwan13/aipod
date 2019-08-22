@@ -16,6 +16,7 @@ import { HttpClient } from "@angular/common/http";
 
 import { FacedetectapiService } from "../facedetectapi.service";
 import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
+import { Observable, interval } from "rxjs";
 
 declare var faceapi: any;
 
@@ -242,7 +243,6 @@ export class WebcamDashboardComponent implements OnInit {
         .sub(meanImageNetRGB)
         .reverse(2) // using the conventions from vgg16 documentation
         .expandDims();
-      console.log("inside the vgg preProcessing:");
     } else if (modelName == "mobilenet") {
       let offset = tf.scalar(127.5);
       return tensor
@@ -299,6 +299,12 @@ export class WebcamDashboardComponent implements OnInit {
       .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
       .withFaceLandmarks()
       .withFaceDescriptors();
+    if (detections != null) {
+      console.log("here is the zeroth element of the detections list");
+      console.log(detections);
+    } else {
+      console.log("No face detected");
+    }
     const displaySize = { width: 640, height: 480 };
 
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
@@ -637,7 +643,6 @@ export class WebcamDashboardComponent implements OnInit {
         if (this.detectionMode !== 3) return;
         this.detectFrame(video, model);
       });
-      console.log(predictions);
     });
   };
 
@@ -757,9 +762,37 @@ export class WebcamDashboardComponent implements OnInit {
     this.detectFrame(this.video, this.objectModel);
   }
 
+  // Fucntion created for use with webcam feed, used to identify if there is a person
+  // in the frame or not
+
+  detectPerson = (video, model) => {
+    if (this.video == null || this.convertState == 1) {
+      return this.frameHasPerson;
+    }
+    console.log("inside Detect Person :");
+    console.log("The value of this.frameHasPerson is " + this.frameHasPerson);
+    model.detect(video).then(predictions => {
+      this.renderPredictions(predictions);
+
+      if (predictions[0].class == "person") {
+        this.frameHasPerson = true;
+        console.log("detectPerson() detects a person");
+        return this.frameHasPerson;
+      } else {
+        this.frameHasPerson = false;
+        console.log("detectPerson() fails to detect a person");
+        return this.frameHasPerson;
+      }
+    });
+  };
+
+  ///////////////////////////////////////////////////////////
+
   webcamPrediction: string = null;
   webFeedStatus: boolean = false;
+  frameHasPerson: boolean = false;
   complete_name = [];
+  sTimeout = null;
   public onWebFeedButton() {
     console.log("web feed button clicked");
     this.faceStatus = false;
@@ -768,19 +801,19 @@ export class WebcamDashboardComponent implements OnInit {
     this.emotionsStatus = false;
     this.predictionsStatus = false;
     this.webFeedStatus = true;
-    this.detectionMode = 3;
+    this.detectionMode = 5;
     this.isVisible = 1;
-
-    //for getting image from the canvas
-
-    console.log("check web image running");
-    var canvas = document.createElement("canvas");
-    canvas.width = this.video.videoWidth;
-    canvas.height = this.video.videoHeight;
-    canvas
-      .getContext("2d")
-      .drawImage(this.video, 0, 0, canvas.width, canvas.height);
-    var imgData = canvas.toDataURL("image/jpeg");
+    if (this.webFeedStatus == true) {
+      this.frameHasPerson = this.detectPerson(this.video, this.objectModel);
+    }
+    // //for getting image from the canvas
+    // var canvas = document.createElement("canvas");
+    // canvas.width = this.video.videoWidth;
+    // canvas.height = this.video.videoHeight;
+    // canvas
+    //   .getContext("2d")
+    //   .drawImage(this.video, 0, 0, canvas.width, canvas.height);
+    // var imgData = canvas.toDataURL("image/jpeg");
 
     // Below two lines are used to see the image taken from the webcam in a new page
     // var w = window.open("about:blank", "image from canvas");
@@ -793,93 +826,54 @@ export class WebcamDashboardComponent implements OnInit {
 
     // uncomment below lines once everything is fine
 
-    this.facedectapiservice
-      .recognizeImage(criminal_to_detect)
-      .subscribe(reponse => {
-        this.webcamPrediction = reponse.images[0].transaction.subject_id;
-        console.log("The predicted criminal is " + this.webcamPrediction);
+    // this.facedectapiservice
+    //   .recognizeImage(criminal_to_detect)
+    //   .subscribe(reponse => {
+    //     this.webcamPrediction = reponse.images[0].transaction.subject_id;
+    //     console.log("The predicted criminal is " + this.webcamPrediction);
 
-        this.complete_name = this.getFirstandLastName(this.webcamPrediction);
-        console.log("The complete name is :" + this.complete_name);
-        if (this.complete_name[0] == "carlos") {
-          this.detected_faces.push({
-            firstName: "carlos",
-            lastName: "ALVAREZ",
-            photo: "./assets/img/placeholder1.jpg",
-            gender: "Male",
-            dateOfBirth: "31/10/1971",
-            placeOfBirth: "Miami, Florida, United States",
-            nationality: "United States",
-            wantedStatus: 1,
-            wantedBy: "Interpol",
-            charge:
-              "Conspiracy to Possess with Intent to Distribute Five Kilograms or More of Cocaine",
-            timeStamp: "Time"
-          });
-        } else if (this.complete_name[0] == "marwan") {
-          this.detected_faces.push({
-            firstName: "marwan",
-            lastName: "sweidan",
-            photo: "./assets/img/placeholder1.jpg",
-            gender: "Male",
-            dateOfBirth: "10/07/1987",
-            placeOfBirth: "BEIRUT, Lebanon",
-            nationality: "Lebanon",
-            wantedStatus: 1,
-            wantedBy: "-",
-            charge: "sexual assualt",
-            timeStamp: "Time"
-          });
-        } else if (this.complete_name[0] == "raziiat") {
-          this.detected_faces.push({
-            firstName: "raziiat",
-            lastName: "utsumieva",
-            photo: "./assets/img/placeholder1.jpg",
-            gender: "Female",
-            dateOfBirth: "05/05/1979",
-            placeOfBirth: "BUYNAKSK TOWN, DAGESTAN REPUBLIC, Russia",
-            nationality: "Russia",
-            wantedStatus: 1,
-            wantedBy: "Interpol",
-            charge: "Participation in illegal armed formation",
-            timeStamp: "Time"
-          });
-        } else if (this.complete_name[0] == "sergio") {
-          this.detected_faces.push({
-            firstName: "sergio",
-            lastName: "robles",
-            photo: "./assets/img/placeholder1.jpg",
-            gender: "Male",
-            dateOfBirth: "04/04/1982",
-            placeOfBirth: "Mexico",
-            nationality: "Mexico",
-            wantedStatus: 1,
-            wantedBy: "Interpol",
-            charge:
-              "Conspiracy to possess with intent to distribute over 5 kilograms of cocaine",
-            timeStamp: "Time"
-          });
-        } else {
-          this.detected_faces.push({
-            firstName: this.complete_name[0],
-            lastName: this.complete_name[1],
-            photo: "./assets/img/placeholder1.jpg",
-            gender: "Gender",
-            dateOfBirth: "Date Of Birth",
-            placeOfBirth: "Place of Birth",
-            nationality: "Nationality",
-            wantedStatus: 0,
-            wantedBy: "Wanted by",
-            charge: "Detecting..",
-            timeStamp: "Time"
-          });
-        }
-      });
+    //     this.complete_name = this.getFirstandLastName(this.webcamPrediction);
+    //     console.log("The complete name is :" + this.complete_name);
+    //   });
+    if (this.webFeedStatus == true && this.frameHasPerson == true) {
+      // for getting image from the canvas
+      var canvas = document.createElement("canvas");
+      canvas.width = this.video.videoWidth;
+      canvas.height = this.video.videoHeight;
+      canvas
+        .getContext("2d")
+        .drawImage(this.video, 0, 0, canvas.width, canvas.height);
+      var imgData = canvas.toDataURL("image/jpeg");
+      console.log("Calling face detect api, kairos");
 
+      // Below two lines are used to see the image taken from the webcam in a new page
+      var w = window.open("about:blank", "image from canvas");
+      w.document.write("<img src='" + imgData + "' alt='from canvas'/>");
+    }
+    if (this.frameHasPerson == false) {
+      console.log("kairos api not called");
+    }
     // uncomment above line if everything works
 
     // } while (this.webFeedStatus == true);
+    var sub: any;
+    if (this.webFeedStatus == true) {
+      console.log("WenFeedStatus is true, inside the conditional");
+      sub = interval(10000).subscribe(val =>
+        this.detectPerson(this.video, this.objectModel)
+      );
+    }
+    if (!this.webFeedStatus) {
+      console.log("WenFeedStatus is false, inside the conditional");
+      sub.unsubscribe();
+    }
+
     console.log("exiting");
+    console.log(
+      "changing frameHasPerson to false after exiting from the api call to kairos"
+    );
+    this.frameHasPerson = false;
+    this.webFeedStatus = false;
   }
 
   // Function for sleep
@@ -907,20 +901,6 @@ export class WebcamDashboardComponent implements OnInit {
       var imgURL = reader.result;
       this.selectedFile = imgURL;
     };
-
-    // this.detected_faces.push({
-    //   firstName: "Bhuwan",
-    //   lastName: "Bhatt",
-    //   photo: "./assets/img/placeholder1.jpg",
-    //   gender: "Gender",
-    //   dateOfBirth: "Date Of Birth",
-    //   placeOfBirth: "Place of Birth",
-    //   nationality: "Nationality",
-    //   wantedStatus: 0,
-    //   wantedBy: "Wanted by",
-    //   charge: "Detecting..",
-    //   timeStamp: "Time"
-    // });
   }
 
   // Variables for sending to the api
