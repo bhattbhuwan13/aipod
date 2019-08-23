@@ -803,14 +803,25 @@ export class WebcamDashboardComponent implements OnInit {
             this.webcamPrediction = reponse.images[0].transaction.subject_id;
             console.log("The predicted criminal is " + this.webcamPrediction);
 
-            // this.complete_name = this.getFirstandLastName(this.webcamPrediction);
-            // console.log("The complete name is :" + this.complete_name);
+            this.complete_name = this.getFirstandLastName(
+              this.webcamPrediction
+            );
+            console.log("The complete name is :" + this.complete_name);
           });
-
-        // // Below two lines are used to see the image taken from the webcam in a new page
-        // var w = window.open("about:blank", "image from canvas");
-        // w.document.write("<img src='" + imgData + "' alt='from canvas'/>");
-
+        this.detected_faces.push({
+          firstName: this.complete_name[0],
+          lastName: this.complete_name[1],
+          photo: "./assets/img/placeholder1.jpg",
+          gender: "Male",
+          dateOfBirth: "31/10/1971",
+          placeOfBirth: "Miami, Florida, United States",
+          nationality: "United States",
+          wantedStatus: 1,
+          wantedBy: "Interpol",
+          charge:
+            "Conspiracy to Possess with Intent to Distribute Five Kilograms or More of Cocaine",
+          timeStamp: "Time"
+        });
         ///////////////////////////////////////////////
       } else {
         this.frameHasPerson = false;
