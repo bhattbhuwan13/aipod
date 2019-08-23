@@ -793,6 +793,20 @@ export class WebcamDashboardComponent implements OnInit {
           "Calling face detect api, kairos from detectPerson() function"
         );
 
+        var criminal_to_detect = {
+          image: imgData,
+          gallery_name: "criminals"
+        };
+        this.facedectapiservice
+          .recognizeImage(criminal_to_detect)
+          .subscribe(reponse => {
+            this.webcamPrediction = reponse.images[0].transaction.subject_id;
+            console.log("The predicted criminal is " + this.webcamPrediction);
+
+            // this.complete_name = this.getFirstandLastName(this.webcamPrediction);
+            // console.log("The complete name is :" + this.complete_name);
+          });
+
         // // Below two lines are used to see the image taken from the webcam in a new page
         // var w = window.open("about:blank", "image from canvas");
         // w.document.write("<img src='" + imgData + "' alt='from canvas'/>");
