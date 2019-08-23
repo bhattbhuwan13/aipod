@@ -755,7 +755,7 @@ export class WebcamDashboardComponent implements OnInit {
     this.weaponStatus = false;
     this.emotionsStatus = false;
     this.predictionsStatus = true;
-    this.webFeedStatus = true;
+    this.webFeedStatus = false;
     this.detectionMode = 5;
     this.isVisible = 0;
     this.webcamPrediction = null;
@@ -774,6 +774,10 @@ export class WebcamDashboardComponent implements OnInit {
     model.detect(video).then(predictions => {
       this.renderPredictions(predictions);
 
+      if (this.webFeedStatus == false) {
+        clearInterval(this.pool_interval);
+      }
+
       if (predictions[0].class == "person") {
         this.frameHasPerson = true;
         console.log("detectPerson() detects a person");
@@ -785,7 +789,9 @@ export class WebcamDashboardComponent implements OnInit {
           .getContext("2d")
           .drawImage(this.video, 0, 0, canvas.width, canvas.height);
         var imgData = canvas.toDataURL("image/jpeg");
-        console.log("Calling face detect api, kairos");
+        console.log(
+          "Calling face detect api, kairos from detectPerson() function"
+        );
 
         // // Below two lines are used to see the image taken from the webcam in a new page
         // var w = window.open("about:blank", "image from canvas");
@@ -806,6 +812,7 @@ export class WebcamDashboardComponent implements OnInit {
   frameHasPerson: boolean = false;
   complete_name = [];
   sTimeout = null;
+  pool_interval = null;
   public onWebFeedButton() {
     console.log("web feed button clicked");
     this.faceStatus = false;
@@ -869,17 +876,23 @@ export class WebcamDashboardComponent implements OnInit {
     // uncomment above line if everything works
 
     // } while (this.webFeedStatus == true);
-    var sub: any;
-    if (this.webFeedStatus == true) {
-      console.log("WenFeedStatus is true, inside the conditional");
-      sub = interval(10000).subscribe(val =>
-        this.detectPerson(this.video, this.objectModel)
-      );
-    }
-    if (!this.webFeedStatus) {
-      console.log("WenFeedStatus is false, inside the conditional");
-      sub.unsubscribe();
-    }
+
+    // code below works perfectly
+
+    // if (this.webFeedStatus == true) {
+    //   console.log("WenFeedStatus is true, inside the conditional");
+    //   console.log("Calling detectPerson at regular interval");
+    //   sub = interval(10000).subscribe(val =>
+    //     this.detectPerson(this.video, this.objectModel)
+    //   );
+    // }
+
+    // code above works perfectly
+
+    this.pool_interval = setInterval(
+      () => this.detectPerson(this.video, this.objectModel),
+      10000
+    );
 
     console.log("exiting");
     console.log(
