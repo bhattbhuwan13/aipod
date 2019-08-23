@@ -755,7 +755,7 @@ export class WebcamDashboardComponent implements OnInit {
     this.weaponStatus = false;
     this.emotionsStatus = false;
     this.predictionsStatus = true;
-    this.webFeedStatus = false;
+    this.webFeedStatus = true;
     this.detectionMode = 5;
     this.isVisible = 0;
     this.webcamPrediction = null;
@@ -885,8 +885,6 @@ export class WebcamDashboardComponent implements OnInit {
     console.log(
       "changing frameHasPerson to false after exiting from the api call to kairos"
     );
-    this.frameHasPerson = false;
-    this.webFeedStatus = false;
   }
 
   // Function for sleep
