@@ -781,7 +781,7 @@ export class WebcamDashboardComponent implements OnInit {
       if (predictions[0].class == "person") {
         this.frameHasPerson = true;
         console.log("detectPerson() detects a person");
-        ///////////////////////////////////////////////
+
         var canvas = document.createElement("canvas");
         canvas.width = this.video.videoWidth;
         canvas.height = this.video.videoHeight;
@@ -806,23 +806,25 @@ export class WebcamDashboardComponent implements OnInit {
             this.complete_name = this.getFirstandLastName(
               this.webcamPrediction
             );
-            console.log("The complete name is :" + this.complete_name);
+            console.log("The first name is :" + this.complete_name[0]);
+            console.log("The first name is :" + this.complete_name[1]);
           });
+        let detail = faceRegister.find(
+          item => item.key === this.complete_name[0].toLowerCase()
+        );
         this.detected_faces.push({
-          firstName: this.complete_name[0],
-          lastName: this.complete_name[1],
+          firstName: detail.firstName,
+          lastName: detail.lastName,
           photo: "./assets/img/placeholder1.jpg",
-          gender: "Male",
-          dateOfBirth: "31/10/1971",
-          placeOfBirth: "Miami, Florida, United States",
-          nationality: "United States",
-          wantedStatus: 1,
-          wantedBy: "Interpol",
-          charge:
-            "Conspiracy to Possess with Intent to Distribute Five Kilograms or More of Cocaine",
+          gender: detail.gender,
+          dateOfBirth: detail.dob,
+          placeOfBirth: detail.pob,
+          nationality: detail.nationality,
+          wantedStatus: detail.wanted_status,
+          wantedBy: detail.wanted_by,
+          charge: detail.charge,
           timeStamp: "Time"
         });
-        ///////////////////////////////////////////////
       } else {
         this.frameHasPerson = false;
         console.log("detectPerson() fails to detect a person");
@@ -916,7 +918,7 @@ export class WebcamDashboardComponent implements OnInit {
 
     this.pool_interval = setInterval(
       () => this.detectPerson(this.video, this.objectModel),
-      10000
+      5000
     );
 
     console.log("exiting");
