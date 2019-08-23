@@ -1012,80 +1012,24 @@ export class WebcamDashboardComponent implements OnInit {
         this.predicted_criminal = reponse.images[0].transaction.subject_id;
 
         this.full_name = this.getFirstandLastName(this.predicted_criminal);
-        console.log("The complete name is :" + this.full_name);
-        if (this.full_name[0] == "carlos") {
-          this.detected_faces.push({
-            firstName: "carlos",
-            lastName: "ALVAREZ",
-            photo: "./assets/img/placeholder1.jpg",
-            gender: "Male",
-            dateOfBirth: "31/10/1971",
-            placeOfBirth: "Miami, Florida, United States",
-            nationality: "United States",
-            wantedStatus: 1,
-            wantedBy: "Interpol",
-            charge:
-              "Conspiracy to Possess with Intent to Distribute Five Kilograms or More of Cocaine",
-            timeStamp: "Time"
-          });
-        } else if (this.full_name[0] == "marwan") {
-          this.detected_faces.push({
-            firstName: "marwan",
-            lastName: "sweidan",
-            photo: "./assets/img/placeholder1.jpg",
-            gender: "Male",
-            dateOfBirth: "10/07/1987",
-            placeOfBirth: "BEIRUT, Lebanon",
-            nationality: "Lebanon",
-            wantedStatus: 1,
-            wantedBy: "Texas police department",
-            charge: "sexual assualt",
-            timeStamp: "Time"
-          });
-        } else if (this.full_name[0] == "raziiat") {
-          this.detected_faces.push({
-            firstName: "raziiat",
-            lastName: "utsumieva",
-            photo: "./assets/img/placeholder1.jpg",
-            gender: "Female",
-            dateOfBirth: "05/05/1979",
-            placeOfBirth: "BUYNAKSK TOWN, DAGESTAN REPUBLIC, Russia",
-            nationality: "Russia",
-            wantedStatus: 1,
-            wantedBy: "Interpol",
-            charge: "Participation in illegal armed formation",
-            timeStamp: "Time"
-          });
-        } else if (this.full_name[0] == "sergio") {
-          this.detected_faces.push({
-            firstName: "sergio",
-            lastName: "robles",
-            photo: "./assets/img/placeholder1.jpg",
-            gender: "Male",
-            dateOfBirth: "04/04/1982",
-            placeOfBirth: "Mexico",
-            nationality: "Mexico",
-            wantedStatus: 1,
-            wantedBy: "Interpol",
-            charge:
-              "Conspiracy to possess with intent to distribute over 5 kilograms of cocaine",
-            timeStamp: "Time"
-          });
-        } else {
-          this.detected_faces.push({
-            firstName: this.full_name[0],
-            lastName: this.full_name[1],
-            photo: "./assets/img/placeholder1.jpg",
-            gender: "Gender",
-            dateOfBirth: "Date Of Birth",
-            placeOfBirth: "Place of Birth",
-            nationality: "Nationality",
-            wantedStatus: 0,
-            wantedBy: "Wanted by",
-            charge: "Detecting..",
-            timeStamp: "Time"
-          });
-        }
+
+        let detail = faceRegister.find(
+          item => item.key === this.full_name[0].toLowerCase()
+        );
+
+        this.detected_faces.push({
+          firstName: detail.firstName,
+          lastName: detail.lastName,
+          photo: "./assets/img/placeholder1.jpg",
+          gender: detail.gender,
+          dateOfBirth: detail.dob,
+          placeOfBirth: detail.pob,
+          nationality: detail.nationality,
+          wantedStatus: detail.wanted_status,
+          wantedBy: detail.wanted_by,
+          charge: detail.charge,
+          timeStamp: "Time"
+        });
       });
   }
 
