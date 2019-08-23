@@ -815,7 +815,7 @@ export class WebcamDashboardComponent implements OnInit {
         this.detected_faces.push({
           firstName: detail.firstName,
           lastName: detail.lastName,
-          photo: "./assets/img/placeholder1.jpg",
+          photo: imgData,
           gender: detail.gender,
           dateOfBirth: detail.dob,
           placeOfBirth: detail.pob,
