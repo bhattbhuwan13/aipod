@@ -538,13 +538,13 @@ export class WebcamDashboardComponent implements OnInit {
       .then(predictions => {
         // console.log(prediction);
         let top5 = Array.from(predictions)
-          .map(function(p, i) {
+          .map(function (p, i) {
             return {
               score: p,
               class: IMAGENET_CLASSES[i]
             };
           })
-          .sort(function(a: any, b: any) {
+          .sort(function (a: any, b: any) {
             return b.score - a.score;
           })
           .slice(0, 5);
@@ -851,7 +851,7 @@ export class WebcamDashboardComponent implements OnInit {
     this.detectionMode = 5;
     this.isVisible = 1;
     if (this.webFeedStatus == true) {
-      setTimeout(()=>this.detectPerson(this.video, this.objectModel), 7000);
+      setTimeout(() => this.detectPerson(this.video, this.objectModel), 7000);
     }
     // //for getting image from the canvas
     // var canvas = document.createElement("canvas");
@@ -918,7 +918,7 @@ export class WebcamDashboardComponent implements OnInit {
 
     this.pool_interval = setInterval(
       () => this.detectPerson(this.video, this.objectModel),
-      5000
+      1000
     );
 
     console.log("exiting");
