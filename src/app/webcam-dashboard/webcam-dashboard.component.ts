@@ -851,7 +851,7 @@ export class WebcamDashboardComponent implements OnInit {
     this.detectionMode = 5;
     this.isVisible = 1;
     if (this.webFeedStatus == true) {
-      this.detectPerson(this.video, this.objectModel);
+      setTimeout(()=>this.detectPerson(this.video, this.objectModel), 7000);
     }
     // //for getting image from the canvas
     // var canvas = document.createElement("canvas");

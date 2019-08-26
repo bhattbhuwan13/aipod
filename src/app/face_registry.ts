@@ -1,5 +1,18 @@
 export const faceRegister = [
   {
+    key: "bhuwan",
+    firstName: "Bhuwan",
+    lastName: "Bhatt",
+    gender: "Male",
+    dob: "14/06/1996",
+    pob: "New York, Nepal",
+    nationality: "Nepal",
+    wantedStatus: 0,
+    wantedBy: "",
+    charge: "",
+    timeStamp: "Time"
+  },
+  {
     key: "donald",
     firstName: "Donald",
     lastName: "Trump",
