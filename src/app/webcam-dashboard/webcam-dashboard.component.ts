@@ -812,19 +812,31 @@ export class WebcamDashboardComponent implements OnInit {
         let detail = faceRegister.find(
           item => item.key === this.complete_name[0].toLowerCase()
         );
-        this.detected_faces.push({
-          firstName: detail.firstName,
-          lastName: detail.lastName,
-          photo: imgData,
-          gender: detail.gender,
-          dateOfBirth: detail.dob,
-          placeOfBirth: detail.pob,
-          nationality: detail.nationality,
-          wantedStatus: detail.wanted_status,
-          wantedBy: detail.wanted_by,
-          charge: detail.charge,
-          timeStamp: "Time"
-        });
+
+        // Keeping only the unique elements
+        var i;
+        var already_exists = false;
+        for (i = 0; i < this.detected_faces.length; i++) {
+          if (this.detected_faces[i].firstName == detail.firstName) {
+            already_exists = true;
+          }
+        }
+        if (already_exists == false) {
+          this.detected_faces.push({
+            firstName: detail.firstName,
+            lastName: detail.lastName,
+            photo: imgData,
+            gender: detail.gender,
+            dateOfBirth: detail.dob,
+            placeOfBirth: detail.pob,
+            nationality: detail.nationality,
+            wantedStatus: detail.wanted_status,
+            wantedBy: detail.wanted_by,
+            charge: detail.charge,
+            timeStamp: "Time"
+          });
+        }
+
       } else {
         this.frameHasPerson = false;
         console.log("detectPerson() fails to detect a person");
