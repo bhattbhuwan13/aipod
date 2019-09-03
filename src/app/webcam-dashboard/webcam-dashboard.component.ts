@@ -932,7 +932,7 @@ export class WebcamDashboardComponent implements OnInit {
 
     this.pool_interval = setInterval(
       () => this.detectPerson(this.video, this.objectModel),
-      1000
+      70
     );
 
     console.log("exiting");
