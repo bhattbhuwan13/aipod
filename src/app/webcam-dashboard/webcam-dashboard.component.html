@@ -45,6 +45,10 @@
                         <div class="rectangle rectangle--middle">
                             <div class="thumb thumb--middle" >
                                 <div id="def-video" class="def-video" >
+                                    <section class="loading" [ngStyle]="{'display':all_model_loaded ? 'none':'inline' }">
+                                        <span class="loading__anim" >
+                                        </span>
+                                    </section>
                                     
                                     <video class="rounded centered hide" id="vidwebcam" autoplay muted width="640" height="475"  [ngStyle]="{'display':isVisible ? 'block':'none' }"></video>
                                     <canvas id="canvaswebcam" [ngStyle]="{'display':isVisible ? 'block':'none' }"></canvas>   

@@ -260,7 +260,7 @@ export class WebcamDashboardComponent implements OnInit {
       throw new Error("UnKnown Model error");
     }
   }
-
+  all_model_loaded: boolean = false;
   public async trackFaceAndRecognize() {
     await Promise.all([
       faceapi.nets.tinyFaceDetector.loadFromUri("/assets/models"),
@@ -271,6 +271,7 @@ export class WebcamDashboardComponent implements OnInit {
       faceapi.nets.faceExpressionNet.loadFromUri("/assets/models")
     ]);
     console.log("faceapi all model loaded");
+    this.all_model_loaded = true;
 
     this.labeledFaceDescriptors = await this.loadLabeledImages();
     console.log("all pattern loaded");
