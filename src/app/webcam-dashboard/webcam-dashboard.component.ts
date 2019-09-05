@@ -271,10 +271,11 @@ export class WebcamDashboardComponent implements OnInit {
       faceapi.nets.faceExpressionNet.loadFromUri("/assets/models")
     ]);
     console.log("faceapi all model loaded");
-    this.all_model_loaded = true;
+
 
     this.labeledFaceDescriptors = await this.loadLabeledImages();
     console.log("all pattern loaded");
+    this.all_model_loaded = true;
 
     const maxDescriptorDistance = 0.6;
     this.faceMatcher = new faceapi.FaceMatcher(
